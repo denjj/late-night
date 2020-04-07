@@ -50,6 +50,8 @@ widget.bind(SC.Widget.Events.PLAY_PROGRESS, function(){
   });
 })
 
+
+// When playing
 let title = document.getElementById("title");
 let artist = document.getElementById("artist");
 let artwork = document.getElementById("artwork");
@@ -63,10 +65,14 @@ widget.bind(SC.Widget.Events.READY, function() {
       console.log(currentSound.title);
       console.log(currentSound.artwork_url);
 
-      document.getElementById("artist").textContent = currentSound.user.username;
-      document.getElementById("title").textContent = currentSound.title;
       document.getElementById("artwork").src = currentSound.artwork_url;
+      document.getElementById("titleLink").textContent = currentSound.title;
+      document.getElementById("titleLink").setAttribute('href', currentSound.permalink_url);
+      document.getElementById("artistLink").textContent = currentSound.user.username;
+      document.getElementById("artistLink").setAttribute('href', currentSound.user.permalink_url);
 
     });
   });
 });
+
+
