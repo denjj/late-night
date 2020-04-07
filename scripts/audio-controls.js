@@ -45,7 +45,7 @@ function playTrack(){
         if (paused){
             playToggle.childNodes[0].className = "fas fa-play-circle";
         } else {
-            playToggle.childNodes[0].className = "fas fa-pause";
+            playToggle.childNodes[0].className = "fas fa-pause-circle";
         }
     })
 
@@ -56,7 +56,7 @@ function playPrevTrack(){
         trackIndex--;
         widget.skip(trackList[trackIndex]);
     }
-    playToggle.childNodes[0].className = "fas fa-pause";
+    playToggle.childNodes[0].className = "fas fa-pause-circle";
 }
 
 function playNextTrack(){
@@ -76,7 +76,7 @@ function playNextTrack(){
             }
         });
     }, 500);
-    playToggle.childNodes[0].className = "fas fa-pause";
+    playToggle.childNodes[0].className = "fas fa-pause-circle";
 }
 
 function shuffleTracks(){
