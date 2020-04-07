@@ -12,12 +12,12 @@ const playPrev = document.getElementById("prev");
 const playNext = document.getElementById("next");
 
 const volumeSlider = document.getElementById("volumeSlider");
-const volumeVal = document.getElementById("volumeVal");
-volumeVal.textContent = volumeSlider.value;
+const volumeText = document.getElementById("volumeText");
+volumeText.textContent = volumeSlider.value;
 
 const seekSlider = document.getElementById("seekSlider");
-const seekVal = document.getElementById("seekVal");
-const seekMax = document.getElementById("seekMax");
+const seekText = document.getElementById("seekText");
+const seekTextMax = document.getElementById("seekTextMax");
 
 const title = document.getElementById("titleLink");
 const artist = document.getElementById("artistLink");
@@ -44,7 +44,7 @@ playPrev.addEventListener("click", () => {widget.prev();});
 playNext.addEventListener("click", () => {widget.next();});
 
 volumeSlider.addEventListener("input", function() {
-    volumeVal.textContent = this.value;
+    volumeText.textContent = this.value;
     widget.setVolume(this.value);
 })
 
@@ -62,7 +62,7 @@ widget.bind(SC.Widget.Events.READY, () => {
         artist.textContent = currentSound.user.username;
         title.setAttribute("href", currentSound.permalink_url);
         artist.setAttribute("href", currentSound.user.permalink_url);
-        seekMax.textContent = convertSongTime(currentSound.duration);
+        seekTextMax.textContent = convertSongTime(currentSound.duration);
         });
     });
     });
@@ -73,7 +73,7 @@ widget.bind(SC.Widget.Events.PLAY_PROGRESS, () => {
         widget.getDuration(duration => {
         seekSlider.max = duration;
         seekSlider.value = position;
-        seekVal.textContent = convertSongTime(position);
+        seekText.textContent = convertSongTime(position);
         });
     });
     })
