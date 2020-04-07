@@ -5,11 +5,12 @@
 //
 const widgetIFrame = document.getElementById("scWidget"); // Initialize and hide soundcloud iframe widget
 const widget = SC.Widget(widgetIFrame);
-widgetIFrame.style.display = "none";
+//widgetIFrame.style.display = "none";
 
 const playToggle = document.getElementById("playPause");
 const playPrev = document.getElementById("prev");
 const playNext = document.getElementById("next");
+const shuffle = document.getElementById("shuffle");
 
 const volumeSlider = document.getElementById("volumeSlider");
 const volumeText = document.getElementById("volumeText");
@@ -22,6 +23,9 @@ const seekTextMax = document.getElementById("seekTextMax");
 const title = document.getElementById("titleLink");
 const artist = document.getElementById("artistLink");
 const artwork = document.getElementById("artwork");
+let trackList = []; // represented as an array of integers for use with soundcloud api calls for playback
+let trackIndex = 0;
+
 
 //
 // Functions
@@ -36,27 +40,76 @@ function convertSongTime(ms){
 
 };
 
+function playPrevTrack(){
+    if (trackIndex > 0){
+        trackIndex--;
+        widget.skip(trackList[trackIndex]);
+    }
+    
+}
+
+function playNextTrack(){
+    if (trackIndex < trackList.length){
+        trackIndex++;
+    } else {
+        trackIndex = 0;
+    }
+
+    widget.skip(trackList[trackIndex]);
+    let repeater = setInterval(() => {widget.skip(trackList[trackIndex]);}, 1000);
+
+    widget.bind(SC.Widget.Events.PLAY_PROGRESS, () => {
+        clearInterval(repeater);
+    })
+
+}
+
+function shuffleTracks(){
+    for(let i = trackList.length - 1; i > 0; i--){
+        let j = Math.floor(Math.random() * i)
+        let temp = trackList[i]
+        trackList[i] = trackList[j]
+        trackList[j] = temp
+      }
+    trackIndex = 0;
+}
+
 //
 // Inits & Event Listeners
 //
 playToggle.addEventListener("click", () => {widget.toggle();});
-playPrev.addEventListener("click", () => {widget.prev();});
-playNext.addEventListener("click", () => {widget.next();});
+playPrev.addEventListener("click", () => {
+    playPrevTrack();
 
-volumeSlider.addEventListener("input", function() {
-    volumeText.textContent = this.value;
-    widget.setVolume(this.value);
+});
+playNext.addEventListener("click", () => {playNextTrack();});
+shuffle.addEventListener("click", () => {shuffleTracks();});
+
+volumeSlider.addEventListener("input", () => {
+    volumeText.textContent = volumeSlider.value;
+    widget.setVolume(volumeSlider.value);
 })
 
-seekSlider.addEventListener("input", function() {
-    widget.seekTo(this.value);
+seekSlider.addEventListener("input", () => {
+    widget.seekTo(seekSlider.value);
 })
 
-// Get & update information about currently playing sound
+
+// Initialize track list as an array of integers
+widget.bind(SC.Widget.Events.READY, () => {
+    widget.getSounds(list => {
+        console.log(list.length);
+        for (let i = 0; i < list.length; i++){
+            trackList.push(i);
+        }
+        console.log(trackList);
+    })
+});
+
+// Update track data whenever a new song begins
 widget.bind(SC.Widget.Events.READY, () => {
     widget.bind(SC.Widget.Events.PLAY, () => {
         widget.getCurrentSound(currentSound => {
-        console.log(currentSound);
         artwork.src = currentSound.artwork_url;
         title.textContent = currentSound.title;
         artist.textContent = currentSound.user.username;
@@ -77,6 +130,8 @@ widget.bind(SC.Widget.Events.PLAY_PROGRESS, () => {
         });
     });
     })
-    
-    
 
+// Play next track once a track finishes
+widget.bind(SC.Widget.Events.FINISH, () => {
+    playNextTrack();
+});
