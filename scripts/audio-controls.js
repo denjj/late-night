@@ -1,78 +1,82 @@
-"use strict";
+"use strict"
 
-// Initialize iframe SC Widget
-let widgetIframe = document.getElementById('sc-widget');
-let widget = SC.Widget(widgetIframe);
-widgetIframe.style.display = "none";
+//
+// Variables
+//
+const widgetIFrame = document.getElementById("scWidget"); // Initialize and hide soundcloud iframe widget
+const widget = SC.Widget(widgetIFrame);
+widgetIFrame.style.display = "none";
 
-// Add Event listeners for media buttons
-document.getElementById("play-pause").addEventListener("click", function(){
-  widget.toggle();
-});
+const playToggle = document.getElementById("playPause");
+const playPrev = document.getElementById("prev");
+const playNext = document.getElementById("next");
 
-document.getElementById("prev").addEventListener("click", function(){
-  widget.prev();
-});
+const volumeSlider = document.getElementById("volumeSlider");
+const volumeVal = document.getElementById("volumeVal");
+volumeVal.textContent = volumeSlider.value;
 
-document.getElementById("next").addEventListener("click", function(){
-  widget.next();
-});
+const seekSlider = document.getElementById("seekSlider");
+const seekVal = document.getElementById("seekVal");
+const seekMax = document.getElementById("seekMax");
 
-// Volume Slider
-var volumeSlider = document.getElementById("volumeSlider");
-var volumeVal = document.getElementById("volumeVal");
-volumeVal.innerHTML = volumeSlider.value;
+const title = document.getElementById("titleLink");
+const artist = document.getElementById("artistLink");
+const artwork = document.getElementById("artwork");
 
-volumeSlider.oninput = function() {
-  volumeVal.innerHTML = this.value;
-  widget.setVolume(this.value);
-}
+//
+// Functions
+//
 
-// Track Seeker
-var seekSlider = document.getElementById("seekSlider");
-var seekVal = document.getElementById("seekVal");
-seekVal.innerHTML = seekSlider.value;
+function convertSongTime(ms){
+        let time = ms / 1000;
+        let minutes = Math.floor(time / 60);
+        let seconds = Math.floor(time % 60);
+        seconds = seconds.toString().padStart(2,"0");
+        return minutes + ":" + seconds;
 
-seekSlider.oninput = function() {
-  seekVal.innerHTML = this.value;
-  widget.seekTo(this.value);
-}
+};
 
-// Track Movement
-widget.bind(SC.Widget.Events.PLAY_PROGRESS, function(){
-  widget.getPosition(function(position){
-    let slide = document.getElementById("seekSlider");
-    widget.getDuration(function(trackLength) {
-      let slideMax = document.getElementById("seekSlider");
-      slideMax.max = trackLength;
-    });
-    slide.value = position;
-  });
+//
+// Inits & Event Listeners
+//
+playToggle.addEventListener("click", () => {widget.toggle();});
+playPrev.addEventListener("click", () => {widget.prev();});
+playNext.addEventListener("click", () => {widget.next();});
+
+volumeSlider.addEventListener("input", function() {
+    volumeVal.textContent = this.value;
+    widget.setVolume(this.value);
 })
 
+seekSlider.addEventListener("input", function() {
+    widget.seekTo(this.value);
+})
 
-// When playing
-let title = document.getElementById("title");
-let artist = document.getElementById("artist");
-let artwork = document.getElementById("artwork");
-
-widget.bind(SC.Widget.Events.READY, function() {
-  widget.bind(SC.Widget.Events.PLAY, function() {
-    // get information about currently playing sound
-    widget.getCurrentSound(function(currentSound) {
-      console.log(currentSound);
-      console.log(currentSound.user.username);
-      console.log(currentSound.title);
-      console.log(currentSound.artwork_url);
-
-      document.getElementById("artwork").src = currentSound.artwork_url;
-      document.getElementById("titleLink").textContent = currentSound.title;
-      document.getElementById("titleLink").setAttribute('href', currentSound.permalink_url);
-      document.getElementById("artistLink").textContent = currentSound.user.username;
-      document.getElementById("artistLink").setAttribute('href', currentSound.user.permalink_url);
-
+// Get & update information about currently playing sound
+widget.bind(SC.Widget.Events.READY, () => {
+    widget.bind(SC.Widget.Events.PLAY, () => {
+        widget.getCurrentSound(currentSound => {
+        console.log(currentSound);
+        artwork.src = currentSound.artwork_url;
+        title.textContent = currentSound.title;
+        artist.textContent = currentSound.user.username;
+        title.setAttribute("href", currentSound.permalink_url);
+        artist.setAttribute("href", currentSound.user.permalink_url);
+        seekMax.textContent = convertSongTime(currentSound.duration);
+        });
     });
-  });
-});
+    });
 
+// Update seekerbar text value & movement while the track is playing
+widget.bind(SC.Widget.Events.PLAY_PROGRESS, () => {
+    widget.getPosition(position => {
+        widget.getDuration(duration => {
+        seekSlider.max = duration;
+        seekSlider.value = position;
+        seekVal.textContent = convertSongTime(position);
+        });
+    });
+    })
+    
+    
 
