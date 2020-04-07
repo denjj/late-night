@@ -15,39 +15,51 @@
 
     <body>
         <h1>Late Night.</h1>
-        <div id=playerBox>
-            <iframe id="sc-widget" 
+        <div id=widgetContainer>
+            <iframe id="scWidget" 
             src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/playlists/1013545495&color=%23ff5500
-            &auto_play=false&hide_related=false&show_comments=true&show_user=true&show_reposts=false&show_teaser=false&visual=false"
-            width="100%" height="115" scrolling="no" frameborder="no" allow="autoplay">
+            &auto_play=false&hide_related=false&show_comments=false&show_user=false&show_reposts=false&show_teaser=false&visual=false"
+            width="100%" height="500" scrolling="no" frameborder="no" allow="autoplay">
             </iframe>
         </div>
 
         <div class="trackInfoContainer">
-            <h2 id="title"><a id="titleLink" href="#" target="_blank">Title</a><h2>
-            <h3 id="artist"><a id="artistLink" href="#" target="_blank">Artist</a></h3>
-            <img src="media/artwork.jpg" id ="artwork" alt="Artwork">
+            <h2 id="title">
+                <a id="titleLink" href="#" target="_blank">Title</a>
+            <h2>
+            <h3 id="artist">
+                <a id="artistLink" href="#" target="_blank">Artist</a>
+            </h3>
+
         </div>
 
-        <div>
+        <div class="artworkContainer">
+            <img src="media/artwork.jpg" id ="artwork" alt="Album Artwork">
+        </div>
+
+        <div id="buttonContainer">
             <button type="button" id="prev">Prev</button>
-            <button type="button" id="play-pause">Play/Pause</button>
+            <button type="button" id="playPause">Play/Pause</button>
             <button type="button" id="next">Next</button>
+            <button type="button" id="shuffle" value="off">Shuffle</button>
         </div>
 
-        <div class="volumeContainer">
+        <div id="volumeContainer">
             <input type="range" id="volumeSlider" min="0" max="100" value="50">
-            <p>Volume: <span id="volumeVal"></span></p>
+            <p>Volume: <span id="volumeText"></span></p>
         </div>
 
-        <div class="seekContainer">
+        <div id="seekContainer">
+            <span id="seekText"></span>
             <input type="range" id="seekSlider" min="0" max="100" value="0">
-            <p>Value: <span id="seekVal"></span></p>
+            <span id="seekTextMax"></span>
         </div>
 
-        <a href="https://soundcloud.com/">
-            <img src="media/powered_by.png">
-        </a>
+        <div id="creditsContainer">
+            <a href="https://soundcloud.com/">
+                <img src="media/powered_by.png">
+            </a>
+        </div>
     </body>
 
 

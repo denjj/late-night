@@ -1,78 +1,138 @@
-"use strict";
+"use strict"
 
-// Initialize iframe SC Widget
-let widgetIframe = document.getElementById('sc-widget');
-let widget = SC.Widget(widgetIframe);
-widgetIframe.style.display = "none";
+//
+// Variables
+//
+const widgetIFrame = document.getElementById("scWidget"); // Initialize and hide soundcloud iframe widget
+const widget = SC.Widget(widgetIFrame);
+widgetIFrame.style.display = "none";
 
-// Add Event listeners for media buttons
-document.getElementById("play-pause").addEventListener("click", function(){
-  widget.toggle();
-});
+const playToggle = document.getElementById("playPause");
+const playPrev = document.getElementById("prev");
+const playNext = document.getElementById("next");
+const shuffle = document.getElementById("shuffle");
 
-document.getElementById("prev").addEventListener("click", function(){
-  widget.prev();
-});
+const volumeSlider = document.getElementById("volumeSlider");
+const volumeText = document.getElementById("volumeText");
+volumeText.textContent = volumeSlider.value;
 
-document.getElementById("next").addEventListener("click", function(){
-  widget.next();
-});
+const seekSlider = document.getElementById("seekSlider");
+const seekText = document.getElementById("seekText");
+const seekTextMax = document.getElementById("seekTextMax");
 
-// Volume Slider
-var volumeSlider = document.getElementById("volumeSlider");
-var volumeVal = document.getElementById("volumeVal");
-volumeVal.innerHTML = volumeSlider.value;
+const title = document.getElementById("titleLink");
+const artist = document.getElementById("artistLink");
+const artwork = document.getElementById("artwork");
+let trackList = []; // represented as an array of integers for use with soundcloud api calls for playback
+let trackIndex = 0;
 
-volumeSlider.oninput = function() {
-  volumeVal.innerHTML = this.value;
-  widget.setVolume(this.value);
+
+//
+// Functions
+//
+
+function convertSongTime(ms){
+        let time = ms / 1000;
+        let minutes = Math.floor(time / 60);
+        let seconds = Math.floor(time % 60);
+        seconds = seconds.toString().padStart(2,"0");
+        return minutes + ":" + seconds;
+
+};
+
+function playPrevTrack(){
+    if (trackIndex > 0){
+        trackIndex--;
+        widget.skip(trackList[trackIndex]);
+    }
+    
 }
 
-// Track Seeker
-var seekSlider = document.getElementById("seekSlider");
-var seekVal = document.getElementById("seekVal");
-seekVal.innerHTML = seekSlider.value;
+function playNextTrack(){
+    if (trackIndex < trackList.length){
+        trackIndex++;
+    } else {
+        trackIndex = 0;
+    }
 
-seekSlider.oninput = function() {
-  seekVal.innerHTML = this.value;
-  widget.seekTo(this.value);
+    // This a workaround for when soundcloud widget hasn't loaded in the sound file yet
+    // Repeater constantly attempts playback, and stops repeating attempts once sound has loaded begins playing
+    let repeater = setInterval(() => {
+        widget.skip(trackList[trackIndex]);
+        widget.isPaused((paused)=>{
+            if (!paused){
+                clearInterval(repeater);
+            }
+        });
+    }, 500);
+
 }
 
-// Track Movement
-widget.bind(SC.Widget.Events.PLAY_PROGRESS, function(){
-  widget.getPosition(function(position){
-    let slide = document.getElementById("seekSlider");
-    widget.getDuration(function(trackLength) {
-      let slideMax = document.getElementById("seekSlider");
-      slideMax.max = trackLength;
-    });
-    slide.value = position;
-  });
+function shuffleTracks(){
+    for(let i = trackList.length - 1; i > 0; i--){
+        let j = Math.floor(Math.random() * i)
+        let temp = trackList[i]
+        trackList[i] = trackList[j]
+        trackList[j] = temp
+      }
+    trackIndex = 0;
+}
+
+//
+// Inits & Event Listeners
+//
+playToggle.addEventListener("click", () => {widget.toggle();});
+playPrev.addEventListener("click", () => {playPrevTrack();});
+playNext.addEventListener("click", () => {playNextTrack();});
+shuffle.addEventListener("click", () => {shuffleTracks();});
+
+volumeSlider.addEventListener("input", () => {
+    volumeText.textContent = volumeSlider.value;
+    widget.setVolume(volumeSlider.value);
+})
+
+seekSlider.addEventListener("input", () => {
+    widget.seekTo(seekSlider.value);
 })
 
 
-// When playing
-let title = document.getElementById("title");
-let artist = document.getElementById("artist");
-let artwork = document.getElementById("artwork");
-
-widget.bind(SC.Widget.Events.READY, function() {
-  widget.bind(SC.Widget.Events.PLAY, function() {
-    // get information about currently playing sound
-    widget.getCurrentSound(function(currentSound) {
-      console.log(currentSound);
-      console.log(currentSound.user.username);
-      console.log(currentSound.title);
-      console.log(currentSound.artwork_url);
-
-      document.getElementById("artwork").src = currentSound.artwork_url;
-      document.getElementById("titleLink").textContent = currentSound.title;
-      document.getElementById("titleLink").setAttribute('href', currentSound.permalink_url);
-      document.getElementById("artistLink").textContent = currentSound.user.username;
-      document.getElementById("artistLink").setAttribute('href', currentSound.user.permalink_url);
-
-    });
-  });
+    // Initialize tracklist as an array of integers for use with soundcloud api calls for playback
+widget.bind(SC.Widget.Events.READY, () => {
+    widget.getSounds(list => {
+        console.log(list.length);
+        for (let i = 0; i < list.length; i++){
+            trackList.push(i);
+        }
+        console.log(trackList);
+    })
 });
 
+    // Update track data whenever a new song begins
+widget.bind(SC.Widget.Events.READY, () => {
+    widget.bind(SC.Widget.Events.PLAY, () => {
+        widget.getCurrentSound(currentSound => {
+        artwork.src = currentSound.artwork_url;
+        title.textContent = currentSound.title;
+        artist.textContent = currentSound.user.username;
+        title.setAttribute("href", currentSound.permalink_url);
+        artist.setAttribute("href", currentSound.user.permalink_url);
+        seekTextMax.textContent = convertSongTime(currentSound.duration);
+        });
+    });
+    });
 
+    // Update seekerbar text value & movement while the track is playing
+widget.bind(SC.Widget.Events.PLAY_PROGRESS, () => {
+    widget.getPosition(position => {
+        widget.getDuration(duration => {
+        seekSlider.max = duration;
+        seekSlider.value = position;
+        seekText.textContent = convertSongTime(position);
+        });
+    });
+    })
+
+    // Play next track once a track finishes
+widget.bind(SC.Widget.Events.FINISH, () => {
+    playNextTrack();
+});
