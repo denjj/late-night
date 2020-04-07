@@ -55,12 +55,16 @@ function playNextTrack(){
         trackIndex = 0;
     }
 
-    widget.skip(trackList[trackIndex]);
-    let repeater = setInterval(() => {widget.skip(trackList[trackIndex]);}, 1000);
-
-    widget.bind(SC.Widget.Events.PLAY_PROGRESS, () => {
-        clearInterval(repeater);
-    })
+    // This a workaround for when soundcloud widget hasn't loaded in the sound file yet
+    // Repeater constantly attempts playback, and stops repeating attempts once sound has loaded begins playing
+    let repeater = setInterval(() => {
+        widget.skip(trackList[trackIndex]);
+        widget.isPaused((paused)=>{
+            if (!paused){
+                clearInterval(repeater);
+            }
+        });
+    }, 500);
 
 }
 
@@ -78,10 +82,7 @@ function shuffleTracks(){
 // Inits & Event Listeners
 //
 playToggle.addEventListener("click", () => {widget.toggle();});
-playPrev.addEventListener("click", () => {
-    playPrevTrack();
-
-});
+playPrev.addEventListener("click", () => {playPrevTrack();});
 playNext.addEventListener("click", () => {playNextTrack();});
 shuffle.addEventListener("click", () => {shuffleTracks();});
 
@@ -95,7 +96,7 @@ seekSlider.addEventListener("input", () => {
 })
 
 
-// Initialize track list as an array of integers
+    // Initialize tracklist as an array of integers for use with soundcloud api calls for playback
 widget.bind(SC.Widget.Events.READY, () => {
     widget.getSounds(list => {
         console.log(list.length);
@@ -106,7 +107,7 @@ widget.bind(SC.Widget.Events.READY, () => {
     })
 });
 
-// Update track data whenever a new song begins
+    // Update track data whenever a new song begins
 widget.bind(SC.Widget.Events.READY, () => {
     widget.bind(SC.Widget.Events.PLAY, () => {
         widget.getCurrentSound(currentSound => {
@@ -120,7 +121,7 @@ widget.bind(SC.Widget.Events.READY, () => {
     });
     });
 
-// Update seekerbar text value & movement while the track is playing
+    // Update seekerbar text value & movement while the track is playing
 widget.bind(SC.Widget.Events.PLAY_PROGRESS, () => {
     widget.getPosition(position => {
         widget.getDuration(duration => {
@@ -131,7 +132,7 @@ widget.bind(SC.Widget.Events.PLAY_PROGRESS, () => {
     });
     })
 
-// Play next track once a track finishes
+    // Play next track once a track finishes
 widget.bind(SC.Widget.Events.FINISH, () => {
     playNextTrack();
 });
