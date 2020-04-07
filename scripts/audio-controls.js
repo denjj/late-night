@@ -5,7 +5,7 @@
 //
 const widgetIFrame = document.getElementById("scWidget"); // Initialize and hide soundcloud iframe widget
 const widget = SC.Widget(widgetIFrame);
-//widgetIFrame.style.display = "none";
+widgetIFrame.style.display = "none";
 
 const playToggle = document.getElementById("playPause");
 const playPrev = document.getElementById("prev");
