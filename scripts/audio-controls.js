@@ -13,8 +13,6 @@ const playNext = document.getElementById("next");
 const shuffle = document.getElementById("shuffle");
 
 const volumeSlider = document.getElementById("volumeSlider");
-const volumeText = document.getElementById("volumeText");
-volumeText.textContent = volumeSlider.value;
 
 const seekSlider = document.getElementById("seekSlider");
 const seekText = document.getElementById("seekText");
@@ -40,12 +38,25 @@ function convertSongTime(ms){
 
 };
 
+function playTrack(){
+    widget.toggle();
+
+    widget.isPaused((paused) =>{
+        if (paused){
+            playToggle.childNodes[0].className = "fas fa-play-circle";
+        } else {
+            playToggle.childNodes[0].className = "fas fa-pause";
+        }
+    })
+
+}
+
 function playPrevTrack(){
     if (trackIndex > 0){
         trackIndex--;
         widget.skip(trackList[trackIndex]);
     }
-    
+    playToggle.childNodes[0].className = "fas fa-pause";
 }
 
 function playNextTrack(){
@@ -65,7 +76,7 @@ function playNextTrack(){
             }
         });
     }, 500);
-
+    playToggle.childNodes[0].className = "fas fa-pause";
 }
 
 function shuffleTracks(){
@@ -81,15 +92,21 @@ function shuffleTracks(){
 //
 // Inits & Event Listeners
 //
-playToggle.addEventListener("click", () => {widget.toggle();});
+playToggle.addEventListener("click", () => {playTrack();});
 playPrev.addEventListener("click", () => {playPrevTrack();});
 playNext.addEventListener("click", () => {playNextTrack();});
 shuffle.addEventListener("click", () => {shuffleTracks();});
 
 volumeSlider.addEventListener("input", () => {
-    volumeText.textContent = volumeSlider.value;
     widget.setVolume(volumeSlider.value);
-})
+    if (volumeSlider.value == 0){
+        volumeIcon.childNodes[0].className = "fas fa-volume-off";
+    } else if (volumeSlider.value > 70){
+        volumeIcon.childNodes[0].className = "fas fa-volume-up";
+    } else {
+        volumeIcon.childNodes[0].className = "fas fa-volume-down";
+    }
+});
 
 seekSlider.addEventListener("input", () => {
     widget.seekTo(seekSlider.value);

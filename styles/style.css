@@ -1,3 +1,35 @@
-#seekSlider {
-    width: 600px;
+h1 {
+  text-decoration: none;
+  color: rgba(0, 0, 0, 1);
+  font-family: 'Dancing Script', cursive;
+}
+
+#titleLink {
+  text-decoration: none;
+  color: rgba(0, 0, 0, 1);
+  font-family: 'Roboto', sans-serif;
+}
+
+#artistLink {
+  text-decoration: none;
+  color: rgba(0, 0, 0, 1);
+  font-family: 'Open Sans', sans-serif;
+}
+
+#mediaButtonsBox button {
+  background-color: SlateGrey; /* Blue background */
+  border: none; /* Remove borders */
+  color: white; /* White text */
+  font-size: 30px; /* Set a font size */
+  cursor: pointer; /* Mouse pointer on hover */
+}
+
+#mediaButtonsBox button:active {
+  opacity: 0.5;
+}
+
+#seekBox span {
+  text-decoration: none;
+  color: rgba(0, 0, 0, 1);
+  font-family: 'Open Sans', sans-serif;
 }
