@@ -3,6 +3,7 @@
 // Initialize iframe SC Widget
 let widgetIframe = document.getElementById('sc-widget');
 let widget = SC.Widget(widgetIframe);
+widgetIframe.style.display = "none";
 
 // Add Event listeners for media buttons
 document.getElementById("play-pause").addEventListener("click", function(){
@@ -49,3 +50,23 @@ widget.bind(SC.Widget.Events.PLAY_PROGRESS, function(){
   });
 })
 
+let title = document.getElementById("title");
+let artist = document.getElementById("artist");
+let artwork = document.getElementById("artwork");
+
+widget.bind(SC.Widget.Events.READY, function() {
+  widget.bind(SC.Widget.Events.PLAY, function() {
+    // get information about currently playing sound
+    widget.getCurrentSound(function(currentSound) {
+      console.log(currentSound);
+      console.log(currentSound.user.username);
+      console.log(currentSound.title);
+      console.log(currentSound.artwork_url);
+
+      document.getElementById("artist").textContent = currentSound.user.username;
+      document.getElementById("title").textContent = currentSound.title;
+      document.getElementById("artwork").src = currentSound.artwork_url;
+
+    });
+  });
+});
