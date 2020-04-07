@@ -1,3 +1,3 @@
 # Late Night.
 A website to relax/study to late at night.  
-Visit here: https://denjj.github.io/late-night/.
+Check it out: https://denjj.github.io/late-night/.
