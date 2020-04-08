@@ -1,10 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<html>
     <head>
         <meta charset="utf-8">
-        <title>Late Night.</title>
+        <meta name="viewport" content="width=device-width, user-scalable=no" />
         <!-- Styles -->
         <link href="styles/style.css" rel="stylesheet">
 
@@ -22,7 +20,7 @@
         <h1>Late Night.</h1>
 
         <a href="https://soundcloud.com/" id="scLogo">
-            <img src="media/powered_by.png">
+            <img src="media/powered_by.png" alt="Powered By Soundcloud">
         </a>
 
         <div id=controls>
@@ -33,26 +31,17 @@
                 </iframe>
 
             <div id=metadataBox>
+
+                <img src="media/artwork.jpg" id ="artwork" alt="Album Artwork">
+                
                 <h2 id="title">
                     <a id="titleLink" href="#" target="_blank">Title</a>
-                <h2>
+                </h2>
                 <h3 id="artist">
                     <a id="artistLink" href="#" target="_blank">Artist</a>
                 </h3>
-            </div>
 
-            <img src="media/artwork.jpg" id ="artwork" alt="Album Artwork"> 
 
-            <div id="mediaButtonsBox">
-                <button type="button" id="prev"><i class="fas fa-step-backward"></i></button>
-                <button type="button" id="playPause"><i class="fas fa-play-circle"></i></button>
-                <button type="button" id="next"><i class="fas fa-step-forward"></i></button>
-                <button type="button" id="shuffle" value="off"><i class="fas fa-random"></i></button>
-            </div>
-
-            <div id="volumeBox">
-                <span id=volumeIcon><i class="fas fa-volume-down"></i></span>
-                <input type="range" id="volumeSlider" min="0" max="100" value="50">
             </div>
 
             <div id="seekBox">
@@ -60,6 +49,19 @@
                 <input type="range" id="seekSlider" min="0" max="100" value="0">
                 <span id="seekTextMax">0:00</span>
             </div>
+
+            <div id="mediaButtonsBox">
+                <div id="volumeControls">
+                    <span id=volumeIcon><i class="fas fa-volume-down"></i></span>
+                    <input type="range" id="volumeSlider" min="0" max="100" value="50">
+                </div>
+                <button type="button" id="prev"><i class="fas fa-step-backward"></i></button>
+                <button type="button" id="playPause"><i class="fas fa-play-circle"></i></button>
+                <button type="button" id="next"><i class="fas fa-step-forward"></i></button>
+                <button type="button" id="shuffle" value="off"><i class="fas fa-random"></i></button>
+            </div>
+
+
 
 
 
