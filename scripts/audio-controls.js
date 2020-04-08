@@ -24,6 +24,7 @@ const artwork = document.getElementById("artwork");
 let trackList = []; // represented as an array of integers for use with soundcloud api calls for playback
 let trackIndex = 0;
 
+const vid = document.getElementById("videoPlayback");
 
 //
 // Functions
@@ -44,8 +45,10 @@ function playTrack(){
     widget.isPaused((paused) =>{
         if (paused){
             playToggle.childNodes[0].className = "fas fa-play-circle";
+            vid.pause();
         } else {
             playToggle.childNodes[0].className = "fas fa-pause-circle";
+            vid.play();
         }
     })
 
@@ -57,6 +60,7 @@ function playPrevTrack(){
         widget.skip(trackList[trackIndex]);
     }
     playToggle.childNodes[0].className = "fas fa-pause-circle";
+    vid.play();
 }
 
 function playNextTrack(){
@@ -77,6 +81,7 @@ function playNextTrack(){
         });
     }, 500);
     playToggle.childNodes[0].className = "fas fa-pause-circle";
+    vid.play();
 }
 
 function shuffleTracks(){

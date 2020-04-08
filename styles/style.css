@@ -3,14 +3,41 @@ body {
 }
 
 h1 {
-  text-decoration: none;
-  color: rgba(0, 0, 0, 1);
   font-family: 'Dancing Script', cursive;
+  font-size: 50px;
+  position: fixed;
+  white-space: nowrap;
+  color:rgba(255,255,255,0.15);
+  text-align: center;
+  top: 30%;
+  left: 50%;
+  transform: translate(-50%, -30%);
 }
 
 a {
   color: inherit;
   text-decoration: inherit;
+}
+
+#videoPlayback {
+  position: fixed;
+  min-width: 100%;
+  min-height: 100%;
+  width: auto;
+  height: auto;
+  z-index: -100;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+#scLogo img{
+  position: fixed;
+  width: 60px;
+  right: 0;
+  top: 0;
+  opacity: 0.5;
+
 }
 
 /***
@@ -23,6 +50,8 @@ a {
   bottom: 0px;
   left: 0px;
   background-color: rgba(0, 0, 0, 0.5);
+  border-top-left-radius: 20px;
+  border-top-right-radius: 20px;
   color: white;
   width: 100vw;
   height: 275px;
@@ -72,7 +101,7 @@ a {
 
 #artist {
   text-decoration: none;
-  color: rgba(230, 230, 230, 0.8);
+  color: rgba(230, 230, 230, 1);
   font-family: 'Open Sans', sans-serif;
   grid-row: 2;
   grid-column: 2;
@@ -85,7 +114,7 @@ a {
   Track Seek: SeekText SeekSlider SeekTextMax
 ****/
 #seekBox {
-  color: rgb(230,230,230);
+  color: rgb(230,230,230, 0.95);
   font-family: 'Open Sans', sans-serif;
   grid-row: 2;
 
@@ -95,48 +124,49 @@ a {
 }
 
 #seekSlider {
-  -webkit-appearance: none;  /* Override default CSS styles */
+  -webkit-appearance: none;
   appearance: none;
-  width: 70%; /* Full-width */
-  height: 5px; /* Specified height */
-  background: rgba(230,230,230, 0.8);; /* Grey background */
+  width: 70%;
+  height: 5px;
+  background: rgba(230,230,230, 1);
   border-radius: 100px;
-  outline: none; /* Remove outline */
-  opacity: 0.6; /* Set transparency (for mouse-over effects on hover) */
-  -webkit-transition: .2s; /* 0.2 seconds transition on hover */
+  outline: none;
+  opacity: 0.7;
+  -webkit-transition: .2s;
   transition: opacity .2s;
 }
 
-/* Mouse-over effects */
 #seekSlider:hover {
-  opacity: 0.9; /* Fully shown on mouse-over */
+  opacity: 0.9;
 
 }
 
 /* The slider handle (use -webkit- (Chrome, Opera, Safari, Edge) and -moz- (Firefox) to override default look) */
 #seekSlider::-webkit-slider-thumb {
-  -webkit-appearance: none; /* Override default look */
+  -webkit-appearance: none;
   appearance: none;
   border-radius: 50px;
-  width: 15px; /* Set a specific slider handle width */
-  height: 15px; /* Slider handle height */
-  background: white; /* Green background */
-  cursor: pointer; /* Cursor on hover */
+  width: 15px;
+  height: 15px;
+  background: white;
+  cursor: pointer;
 }
 
 #seekSlider::-moz-range-thumb {
-  width: 20px; /* Set a specific slider handle width */
-  height: 20px; /* Slider handle height */
-  background: white; /* Green background */
-  cursor: pointer; /* Cursor on hover */
+  width: 20px;
+  height: 20px;
+  background: white;
+  cursor: pointer;
 }
 
 #seekText {
   padding-right: 5px;
+  font-size: 14px;
 }
 
 #seekTextMax {
   padding-left: 5px;
+  font-size: 14px;
 }
 
 /****
@@ -187,36 +217,34 @@ a {
 #volumeSlider {
   -webkit-appearance: none;  /* Override default CSS styles */
   appearance: none;
-  width: 40px; /* Full-width */
-  height: 5px; /* Specified height */
-  background: rgba(230,230,230, 0.8);; /* Grey background */
+  width: 40px;
+  height: 5px;
+  background: rgba(230,230,230, 1);
   border-radius: 100px;
-  outline: none; /* Remove outline */
-  opacity: 0.6; /* Set transparency (for mouse-over effects on hover) */
-  -webkit-transition: .2s; /* 0.2 seconds transition on hover */
+  outline: none;
+  opacity: 0.7;
+  -webkit-transition: .2s;
   transition: opacity .2s;
 }
 
-/* Mouse-over effects */
 #volumeSlider:hover{
-  opacity: 0.9; /* Fully shown on mouse-over */
+  opacity: 0.9;
 }
 
 /* The slider handle (use -webkit- (Chrome, Opera, Safari, Edge) and -moz- (Firefox) to override default look) */
 #volumeSlider::-webkit-slider-thumb {
-  -webkit-appearance: none; /* Override default look */
-  appearance: none;
-  width: 5px; /* Set a specific slider handle width */
-  height: 10px; /* Slider handle height */
-  background: white; /* Green background */
-  cursor: pointer; /* Cursor on hover */
+  -webkit-appearance: none;
+  width: 5px;
+  height: 10px;
+  background: white;
+  cursor: pointer;
 }
 
 #volumeSlider::-moz-range-thumb {
-  width: 10px; /* Set a specific slider handle width */
-  height: 10px; /* Slider handle height */
-  background: white; /* Green background */
-  cursor: pointer; /* Cursor on hover */
+  width: 10px;
+  height: 10px;
+  background: white;
+  cursor: pointer;
 }
 
 #volumeIcon {

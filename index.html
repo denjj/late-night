@@ -19,9 +19,15 @@
     <body>
         <h1>Late Night.</h1>
 
+        <video playsinline muted loop id="videoPlayback">
+            <source src="media/playback.mp4" type="video/mp4">
+            Your browser does not support HTML5 video.
+        </video>
+
         <a href="https://soundcloud.com/" id="scLogo">
             <img src="media/powered_by.png" alt="Powered By Soundcloud">
         </a>
+
 
         <div id=controls>
                 <iframe id="scWidget" 
@@ -31,7 +37,6 @@
                 </iframe>
 
             <div id=metadataBox>
-
                 <img src="media/artwork.jpg" id ="artwork" alt="Album Artwork">
                 
                 <h2 id="title">
@@ -40,7 +45,6 @@
                 <h3 id="artist">
                     <a id="artistLink" href="#" target="_blank">Artist</a>
                 </h3>
-
 
             </div>
 
