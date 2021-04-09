@@ -1,5 +1,5 @@
 # Late Night.
-A music streaming website to relax/study to.\
+A web music player with visuals to relax/study with.\
 Created with HTML/CSS, JavaScript, and SoundCloud API.
 
 Check it out: https://denjj.github.io/late-night/
